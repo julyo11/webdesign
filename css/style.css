@@ -9,12 +9,11 @@ body {
 }
 
 .jumbotron {
-    height: 610px;
+    height: 550px;
+    padding-top: 100px;
     background-size: cover;
     background-attachment: fixed;
-    background-position-y: -220px;
     overflow: hidden;
-    padding-top: 140px;
     color: #ffffff;
     border-radius: 0;
     margin: 0;
@@ -161,10 +160,23 @@ hr {
     display: flex;
 }
 
+.kotak {
+    width: 100%;
+    height: 50px;
+    background-color: #ece8e8;
+    padding-top: 12px;
+    font-weight: bold;
+    color: black;
+    display: block;
+    border-radius: 10px;
+    box-shadow: 5px 10px 10px #000;
+}
+
 .contact {
     background-color: #253861;
     height: 100%;
     position: relative;
+    padding-bottom: 100px;
 }
 
 .contact img {
@@ -200,9 +212,16 @@ footer p {
 }
 
 /* Desktop Version */
-@media (min-width: 960px) {
+@media (min-width: 1200px) {
     .about img {
         width: 350px;
         height: 350px;
+    }
+
+    .jumbotron {
+        height: 610px;
+        padding-top: 140px;
+        background-position-y: -220px;
+
     }
 }
