@@ -61,7 +61,7 @@
         <div class="col-sm-12 col-lg-3">
           <img src="img/julyo.jpg" alt="julyo.jpg" class="rounded-circle gambarAbout">
         </div>
-        <div class="col-sm-12 col-lg-7 offset-2">
+        <div class="col-sm-12 col-lg-7 offset-lg-2">
           <p class="pAbout">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit sed numquam exercitationem,
             mollitia magnam
             voluptate, iusto odio commodi, totam aut ipsam et voluptates. Corporis eum expedita eveniet neque alias
@@ -154,6 +154,19 @@
       </div>
 
       <div class="row">
+        <div class="col-sm-12">
+          <div class="image-upload text-center pt-2 pb-2">
+            <label for="file-input">
+              <div class="kotak" style="background-color: #fff; border-radius: 10px; width: 48px; height: 48px;">
+                <img src="img/icon/plus.png" id="addImages" />
+              </div>
+            </label>
+            <input id="file-input" type="file" />
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
         <div class="col-sm-12 pb-5">
           <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
@@ -199,6 +212,11 @@
                   </div>
                 </div>
               </div>
+              <div class="carousel-item">
+                <img src="img/Online Course Website.png" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block" id="addImages">
+                </div>
+              </div>
             </div>
             <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -229,20 +247,20 @@
         <div class="col-sm-12 col-md-6">
           <form>
             <div class=" form-group">
-              <label for="formGroupExampleInput">Name</label>
-              <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Name">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" required placeholder="Name">
             </div>
             <div class="form-group">
-              <label for="exampleFormControlInput1">Email</label>
-              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" required placeholder="name@example.com">
             </div>
             <div class="form-group">
-              <label for="exampleFormControlTextarea1">Description</label>
-              <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Write Your Message"
+              <label for="description">Description</label>
+              <textarea class="form-control" id="description" required placeholder="Write Your Message"
                 rows="5"></textarea>
             </div>
-            <a href="">
-              <button type="button" class="btn btn-success">Submit</button>
+            <a href="" onclick="confirm('Apakah Anda Ingin Mengirimkan Pesan Ini?')">
+              <button type="button" class="btn btn-success" id="btn-add">Submit</button>
             </a>
           </form>
         </div>
@@ -315,11 +333,87 @@
   </footer>
   <!-- Akhir footer -->
 
-
-
-
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#available-libraries -->
+
+  <script>
+    let name = document.querySelector("#name");
+    let email = document.querySelector("#email");
+    let description = document.querySelector("#description");
+    let btnAdd = document.querySelector("#btn-add");
+    let localdb = [];
+
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyCw7L05lYvs6lBG-Hjdl6RghyunIar3N6M",
+      authDomain: "projek-akhir-web-design.firebaseapp.com",
+      databaseURL: "https://projek-akhir-web-design.firebaseio.com",
+      projectId: "projek-akhir-web-design",
+      storageBucket: "projek-akhir-web-design.appspot.com",
+      messagingSenderId: "583853780382",
+      appId: "1:583853780382:web:7cefc7ab1df9dd0166ba8f"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    let firestoreDB = firebase.firestore();
+
+    let dataCollection = firestoreDB.collection("contact");
+
+    dataCollection
+      .get()
+      .then(function (response) {
+        response.docs.forEach(function (datum) {
+          localdb.push(datum);
+        });
+        render();
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+
+    function render() {
+      let htmlList = "";
+      localdb.forEach(function (item) {
+        console.log(item);
+        htmlList += `<li id="name${item.id}">${item.data().data}</li>`
+      });
+    }
+
+    render();
+
+    btnAdd.addEventListener("click", function () {
+      dataCollection
+      db.push({
+        id: `$(input.value)$(input.value.length)`,
+        data: input.value,
+      });
+      input.value = "";
+      render();
+    });
+
+    // Tambah gambar karosel
+    window.addEventListener('load', function () {
+      document.querySelector('input[type="file"]').addEventListener('change', function () {
+        // Cek gambar terupload atau tidak
+        if (this.files && this.files[0]) {
+          var img = document.getElementById("addImages");
+          img.src = URL.createObjectURL(this.files[0]);
+          img.onload = imgLoaded;
+        }
+      });
+    });
+
+    function imgLoaded(e) {
+      alert('Image Has Been Uploaded!');
+    }
+  </script>
+
   <script src="js/jquery-3.5.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
