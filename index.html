@@ -212,11 +212,6 @@
                   </div>
                 </div>
               </div>
-              <div class="carousel-item">
-                <img src="img/Online Course Website.png" class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block" id="addImages">
-                </div>
-              </div>
             </div>
             <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -259,8 +254,8 @@
               <textarea class="form-control" id="description" required placeholder="Write Your Message"
                 rows="5"></textarea>
             </div>
-            <a href="" onclick="confirm('Apakah Anda Ingin Mengirimkan Pesan Ini?')">
-              <button type="button" class="btn btn-success" id="btn-add">Submit</button>
+            <a href="" onclick="confirm('Apakah Anda Ingin Mengirimkan Pesan Ini?'); addRow();">
+              <button type="button" class="btn btn-success" id="submit">Submit</button>
             </a>
           </form>
         </div>
@@ -343,12 +338,6 @@
     https://firebase.google.com/docs/web/setup#available-libraries -->
 
   <script>
-    let name = document.querySelector("#name");
-    let email = document.querySelector("#email");
-    let description = document.querySelector("#description");
-    let btnAdd = document.querySelector("#btn-add");
-    let localdb = [];
-
     // Your web app's Firebase configuration
     var firebaseConfig = {
       apiKey: "AIzaSyCw7L05lYvs6lBG-Hjdl6RghyunIar3N6M",
@@ -363,55 +352,87 @@
     firebase.initializeApp(firebaseConfig);
     let firestoreDB = firebase.firestore();
 
-    let dataCollection = firestoreDB.collection("contact");
+    let contactCollection = firestoreDB.collection("contact");
 
-    dataCollection
-      .get()
-      .then(function (response) {
-        response.docs.forEach(function (datum) {
-          localdb.push(datum);
-        });
-        render();
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
+    function addRow() {
+      // ambil inputan
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+      var description = document.getElementById('description').value;
 
-    function render() {
-      let htmlList = "";
-      localdb.forEach(function (item) {
-        console.log(item);
-        htmlList += `<li id="name${item.id}">${item.data().data}</li>`
-      });
+      // ambil tabel
+      // 0 = table header
+      var table = document.getElementsByTagName('table')[0];
+
+      // tambah kolom kosong baru di tabel
+      var newRow = table.insertRow(1);
+
+      // tambah baris baru
+      var cel1 = newRow.insertCell(0);
+      var cel2 = newRow.insertCell(2);
+      var cel3 = newRow.insertCell(3);
+
+      // tambah value ke baris baru
+      cel1.innerHTML = name;
+      cel2.innerHTML = email;
+      cel3.innerHTML = description;
     }
 
-    render();
-
-    btnAdd.addEventListener("click", function () {
-      dataCollection
-      db.push({
-        id: `$(input.value)$(input.value.length)`,
-        data: input.value,
-      });
+    // Kirim contact ke database
+    submit.addEventListener("click", function () {
+      contactCollection
+        .add({
+          contact: input.value,
+        })
       input.value = "";
-      render();
+      addRow();
     });
 
     // Tambah gambar karosel
-    window.addEventListener('load', function () {
-      document.querySelector('input[type="file"]').addEventListener('change', function () {
-        // Cek gambar terupload atau tidak
-        if (this.files && this.files[0]) {
-          var img = document.getElementById("addImages");
-          img.src = URL.createObjectURL(this.files[0]);
-          img.onload = imgLoaded;
-        }
-      });
+    window.addEventListener("load", function () {
+      document
+        .querySelector('input[type="file"]')
+        .addEventListener("change", function () {
+          // Cek gambar terupload atau tidak
+          if (this.files && this.files[0]) {
+            var carouselContainer = document.querySelector(".carousel-inner");
+            var carouselItemTemplate = `
+              <img src="https://cdn.jpegmini.com/user/images/slider_puffin_jpegmini_mobile.jpg" class="d-block w-100" alt="...">
+              <div class="carousel-caption d-none d-md-block">
+                <div class="kotak">
+                  <h5>Uploaded Apps</h5>
+                </div>
+              </div>
+          `;
+
+            var carouselItem = document.createElement("div");
+            carouselItem.classList.add("carousel-item");
+            carouselItem.innerHTML = carouselItemTemplate;
+            carouselContainer.prepend(carouselItem);
+
+            var img = carouselItem.querySelector("img.d-block");
+            img.src = URL.createObjectURL(this.files[0]);
+            img.onload = imgLoaded;
+          }
+        });
     });
 
     function imgLoaded(e) {
       alert('Image Has Been Uploaded!');
     }
+
+    let carouselCollection = firestoreDB.collection("carousel");
+
+    carouselCollection
+      .get()
+      .then(function (response) {
+        response.docs.forEach(function (pic) {
+          localdb.push(pic);
+        });
+      })
+      .catch(function (e) {
+        console.log(e);
+      });
   </script>
 
   <script src="js/jquery-3.5.1.min.js"></script>

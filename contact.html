@@ -26,7 +26,6 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Description</th>
@@ -34,13 +33,11 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">1</th>
                                 <td>Julyo</td>
                                 <td>julyo@binus.ac.id</td>
                                 <td>Hello, my name is Julyo from <br> Binus University</td>
                             </tr>
                             <tr>
-                                <th scope="row">2</th>
                                 <td>Julyo</td>
                                 <td>julyo@binus.ac.id</td>
                                 <td>Hello, my name is Julyo from <br> Binus University</td>
@@ -51,6 +48,41 @@
             </div>
         </div>
     </div>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCw7L05lYvs6lBG-Hjdl6RghyunIar3N6M",
+            authDomain: "projek-akhir-web-design.firebaseapp.com",
+            databaseURL: "https://projek-akhir-web-design.firebaseio.com",
+            projectId: "projek-akhir-web-design",
+            storageBucket: "projek-akhir-web-design.appspot.com",
+            messagingSenderId: "583853780382",
+            appId: "1:583853780382:web:7cefc7ab1df9dd0166ba8f"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        let firestoreDB = firebase.firestore();
+
+        let contactCollection = firestoreDB.collection("contact");
+
+        todoCollection
+            .get()
+            .then(function (response) {
+                response.docs.forEach(function (con) {
+                    localdb.push(con);
+                });
+            })
+            .catch(function (e) {
+                console.log(e);
+            });
+    </script>
 </body>
 
 </html>
